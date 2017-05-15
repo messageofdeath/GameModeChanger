@@ -27,15 +27,15 @@ public class gamemodeCommand implements CommandExecutor {
 							Eco eco = null;
 							GameMode gm = null;
 							if(args[0].equalsIgnoreCase("adventure") || args[0].equalsIgnoreCase("adv") || args[0].equalsIgnoreCase("2")) {
-								eco = new Eco(player.getName(), Gamemode.getCommandAdventurePrice());
+								eco = new Eco(player, Gamemode.getCommandAdventurePrice());
 								gm = Gamemode.getAdventure();
 							}
 							if(args[0].equalsIgnoreCase("creative") || args[0].equalsIgnoreCase("cre") || args[0].equalsIgnoreCase("1")) {
-								eco = new Eco(player.getName(), Gamemode.getCommandCreativePrice());
+								eco = new Eco(player, Gamemode.getCommandCreativePrice());
 								gm = Gamemode.getCreative();
 							}
 							if(args[0].equalsIgnoreCase("survival") || args[0].equalsIgnoreCase("sur") || args[0].equalsIgnoreCase("0")) {
-								eco = new Eco(player.getName(), Gamemode.getCommandSurvivalPrice());
+								eco = new Eco(player, Gamemode.getCommandSurvivalPrice());
 								gm = Gamemode.getSurvival();
 							}
 							if(player.getGameMode() != gm) {

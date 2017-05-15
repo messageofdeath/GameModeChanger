@@ -20,13 +20,13 @@ public class signListener implements Listener {
 			if(player.hasPermission("gamemode.signs.create.player." + line3.toLowerCase())) {
 				Eco eco = null;
 				if(line3.equalsIgnoreCase("creative")) {
-					eco = new Eco(player.getName(), Gamemode.getSignCreativeCreatePrice());
+					eco = new Eco(player, Gamemode.getSignCreativeCreatePrice());
 				}
 				if(line3.equalsIgnoreCase("survival")) {
-					eco = new Eco(player.getName(), Gamemode.getSignSurvivalCreatePrice());
+					eco = new Eco(player, Gamemode.getSignSurvivalCreatePrice());
 				}
 				if(line3.equalsIgnoreCase("adventure")) {
-					eco = new Eco(player.getName(), Gamemode.getSignAdventureCreatePrice());
+					eco = new Eco(player, Gamemode.getSignAdventureCreatePrice());
 				}
 				if(eco.hasAccount()) {
 					if(eco.hasEnough()) {

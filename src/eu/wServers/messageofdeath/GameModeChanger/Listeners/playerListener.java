@@ -75,7 +75,7 @@ public class playerListener implements Listener {
 							}
 							if(signline.contains("[GameMode]") && signline2.contains("[Player]") && signline3.contains("Creative") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)) {
 								if(player.hasPermission("gamemode.sign.interact.player.creative") || player.hasPermission("gamemode.*")) {
-									Eco eco = new Eco(player.getName(), Gamemode.getSignCreativeUsePrice());
+									Eco eco = new Eco(player, Gamemode.getSignCreativeUsePrice());
 									if(eco.hasAccount()) {
 										if(eco.hasEnough()) {
 											Gamemode.setSignPlayerGamemode(player, Gamemode.getCreative(), eco);
@@ -95,7 +95,7 @@ public class playerListener implements Listener {
 							}
 							if(signline.contains("[GameMode]") && signline2.contains("[Player]") && signline3.contains("Adventure") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)) {
 								if(player.hasPermission("gamemode.sign.interact.player.adventure") || player.hasPermission("gamemode.*")) {
-									Eco eco = new Eco(player.getName(), Gamemode.getSignAdventureUsePrice());
+									Eco eco = new Eco(player, Gamemode.getSignAdventureUsePrice());
 									if(eco.hasAccount()) {
 										if(eco.hasEnough()) {
 											Gamemode.setSignPlayerGamemode(player, Gamemode.getAdventure(), eco);
@@ -115,7 +115,7 @@ public class playerListener implements Listener {
 							}
 							if(signline.contains("[GameMode]") && signline2.contains("[Player]") && signline3.contains("Survival") && event.getAction().equals(Action.RIGHT_CLICK_BLOCK) && (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN)) {
 								if(player.hasPermission("gamemode.sign.interact.player.survival") || player.hasPermission("gamemode.*")) {
-									Eco eco = new Eco(player.getName(), Gamemode.getSignSurvivalUsePrice());
+									Eco eco = new Eco(player, Gamemode.getSignSurvivalUsePrice());
 									if(eco.hasAccount()) {
 										if(eco.hasEnough()) {
 											Gamemode.setSignPlayerGamemode(player, Gamemode.getSurvival(), eco);

@@ -68,8 +68,8 @@ public class Gamemode {
 		return GameModeChanger.economy;
 	}
 
-	public static Eco getEconomy(String name, double amount) {
-		return new Eco(name, amount);
+	public static Eco getEconomy(Player player, double amount) {
+		return new Eco(player, amount);
 	}
 
 	public static double getCommandCreativePrice() {

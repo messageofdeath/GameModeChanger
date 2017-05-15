@@ -1,30 +1,32 @@
 package eu.wServers.messageofdeath.GameModeChanger.API;
 
+import org.bukkit.entity.Player;
+
 public class Eco {
 
 	public double amount;
-	public String name;
+	public Player player;
 
-	public Eco(String name, double amount) {
-		this.name = name;
+	public Eco(Player player, double amount) {
+		this.player = player;
 		this.amount = amount;
 	}
 
 	public boolean hasEnough() {
-		if(Gamemode.getVault().has(name, amount))
+		if(Gamemode.getVault().has(player, amount))
 			return true;
 		return false;
 	}
 
 	public boolean hasAccount() {
-		if(Gamemode.getVault().hasAccount(name))
+		if(Gamemode.getVault().hasAccount(player))
 			return true;
 		return false;
 	}
 
 	public void charge() {
 		if(hasEnough() == true)
-			Gamemode.getVault().withdrawPlayer(name, amount);
+			Gamemode.getVault().withdrawPlayer(player, amount);
 	}
 
 	public String getFormat() {
@@ -32,6 +34,6 @@ public class Eco {
 	}
 
 	public void newAccount() {
-		Gamemode.getVault().createPlayerAccount(name);
+		Gamemode.getVault().createPlayerAccount(player);
 	}
 }
