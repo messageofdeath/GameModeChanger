@@ -1,0 +1,55 @@
+Plugin:
+  enabled: true
+  world_support: true
+  sign_support: true
+  version: 1.5
+  # Verbose logging. if true it will send a x amount of messages of loading
+  # if false it will send 1 message to console on load up
+  logging: true
+  Announce:
+    # When a player changes there gamemode with /gamemode it announces it
+    gamemodechange: true
+  Change:
+    onJoin:
+      enabled: false
+      gamemode: survival
+  Use:
+    Factions: false
+    Towny: false
+    Vault_Economy: false
+
+# For the signs [GameMode] [Player] <creative,survival> and command /gamemode
+# For the players...
+Vault:
+  Prices:
+    Command:
+      Creative: 200.0
+      Survival: 100.0
+      Adventure: 50.0
+    Sign:
+      Create:
+        Creative: 2000.0
+        Survival: 1000.0
+        Adventure: 500.0
+      Use:
+        Creative: 200.0
+        Survival: 100.0
+        Adventure: 50.0
+
+Worlds:
+- world
+- world_nether
+- world_the_end
+
+World:
+  # & is the beginning of a color with a number/letter | +gm is the gamemode | +w is the world
+  world:
+    # This can only be creative | survival | adventure
+    gamemode: creative
+    message: '&6You were changed to &4+gm &6when you entered &a+w'
+  world_nether:
+    gamemode: survival
+    message: '&6You were changed to &4+gm &6when you entered &a+w'
+  world_the_end:
+    gamemode: adventure
+    message: '&6You were changed to &4+gm &6when you entered &a+w'

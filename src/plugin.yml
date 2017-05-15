@@ -1,0 +1,11 @@
+name: GameModeChanger
+author: messageofdeath
+version: 2.6
+softdepend: [Vault]
+main: eu.wServers.messageofdeath.GameModeChanger.GameModeChanger
+commands:
+  gm:
+  gamemode:
+  gc:
+  gs:
+  gt:
