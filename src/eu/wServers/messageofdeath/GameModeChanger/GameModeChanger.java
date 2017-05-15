@@ -205,9 +205,8 @@ public class GameModeChanger extends JavaPlugin {
 
 	public static Economy economy;
 
-	@SuppressWarnings("rawtypes")
 	private Boolean setupEconomy() {
-		RegisteredServiceProvider economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
+		RegisteredServiceProvider<Economy> economyProvider = getServer().getServicesManager().getRegistration(Economy.class);
 		if(economyProvider != null) {
 			economy = (Economy) economyProvider.getProvider();
 		}
