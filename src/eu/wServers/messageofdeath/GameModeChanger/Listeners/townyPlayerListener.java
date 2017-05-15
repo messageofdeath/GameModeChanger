@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import com.palmergames.bukkit.towny.Towny;
+import com.palmergames.bukkit.towny.object.TownyUniverse;
 
 import eu.wServers.messageofdeath.GameModeChanger.API.Gamemode;
 
@@ -31,16 +32,15 @@ public class townyPlayerListener implements Listener {
 		}
 	}
 
-	@SuppressWarnings("static-access")
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onTownyInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		Action action = event.getAction();
 		if(Gamemode.useTowny() == true) {
-			Towny towny = (Towny) Bukkit.getPluginManager().getPlugin("Towny");
-			if(towny.getTownyUniverse().isWarTime() == true) {
+			if(TownyUniverse.isWarTime() == true) {
 				if(action == Action.RIGHT_CLICK_BLOCK) {
-					int block = player.getItemInHand().getType().getId();
+					int block = player.getInventory().getItemInMainHand().getType().getId();
 					int item = event.getClickedBlock().getType().getId();
 					if(block == 383) {
 						if(!player.hasPermission("gamemode.bypass.towny.war.spawnegg")) {
@@ -56,7 +56,7 @@ public class townyPlayerListener implements Listener {
 					}
 				}
 				if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-					int block = player.getItemInHand().getType().getId();
+					int block = player.getInventory().getItemInMainHand().getType().getId();
 					if(block == 384 || block == 373) {
 						if(!player.hasPermission("gamemode.bypass.towny.war.potions")) {
 							player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Towny] " + ChatColor.RED + "You cannot use Potions during a war!");

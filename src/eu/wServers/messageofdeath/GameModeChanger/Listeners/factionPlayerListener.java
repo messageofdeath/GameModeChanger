@@ -8,8 +8,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.massivecraft.factions.Board;
-import com.massivecraft.factions.FLocation;
+import com.massivecraft.factions.entity.BoardColl;
+import com.massivecraft.factions.entity.MFlag;
+import com.massivecraft.massivecore.ps.PS;
 
 import eu.wServers.messageofdeath.GameModeChanger.API.Gamemode;
 
@@ -20,14 +21,13 @@ public class factionPlayerListener implements Listener {
 	public void onFactionDrop(PlayerDropItemEvent event) {
 		Player player = event.getPlayer();
 		if(Gamemode.useFactions() == true) {
-			FLocation loc = new FLocation(player.getLocation());
-			if(Board.getFactionAt(loc).isWarZone() == true) {
+			if(BoardColl.get().getFactionAt(PS.valueOf(player.getLocation())).getFlag(MFlag.ID_PVP) == true) {
 				if(!player.hasPermission("gamemode.bypass.factions.warzone.drop")) {
 					event.setCancelled(true);
 					player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions]" + ChatColor.RED + " You cannot drop items in a war zone!");
 				}
 			}
-			if(Board.getFactionAt(loc).isSafeZone() == true) {
+			if(BoardColl.get().getFactionAt(PS.valueOf(player.getLocation())).getFlag(MFlag.ID_PEACEFUL) == true) {
 				if(!player.hasPermission("gamemode.bypass.factions.safezone.drop")) {
 					event.setCancelled(true);
 					player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions]" + ChatColor.RED + " You cannot drop items in a safe zone!");
@@ -36,13 +36,13 @@ public class factionPlayerListener implements Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onFactionInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		Action action = event.getAction();
-		FLocation loc = new FLocation(player.getLocation());
 		if(Gamemode.useFactions() == true) {
-			if(Board.getFactionAt(loc).isWarZone()) {
+			if(BoardColl.get().getFactionAt(PS.valueOf(player.getLocation())).getFlag(MFlag.ID_PVP) == true) {
 				if(action == Action.RIGHT_CLICK_BLOCK) {
 					int block = player.getItemInHand().getType().getId();
 					int item = event.getClickedBlock().getType().getId();
@@ -88,49 +88,49 @@ public class factionPlayerListener implements Listener {
 					}
 				}
 			}
-		}
-		if(Board.getFactionAt(loc).isSafeZone()) {
-			if(action == Action.RIGHT_CLICK_BLOCK) {
-				int block = player.getItemInHand().getType().getId();
-				int item = event.getClickedBlock().getType().getId();
-				if(block == 383) {
-					if(!player.hasPermission("gamemode.bypass.factions.safezone.spawnegg")) {
-						player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use a Spawning Egg in a safe zone!");
-						event.setCancelled(true);
+			if(BoardColl.get().getFactionAt(PS.valueOf(player.getLocation())).getFlag(MFlag.ID_PEACEFUL) == true) {
+				if(action == Action.RIGHT_CLICK_BLOCK) {
+					int block = player.getInventory().getItemInMainHand().getType().getId();
+					int item = event.getClickedBlock().getType().getId();
+					if(block == 383) {
+						if(!player.hasPermission("gamemode.bypass.factions.safezone.spawnegg")) {
+							player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use a Spawning Egg in a safe zone!");
+							event.setCancelled(true);
+						}
+					}
+					if(item == 23 || item == 58 || item == 61 || item == 54 || item == 84 || item == 116 || item == 342 || item == 343) {
+						if(!player.hasPermission("gamemode.bypass.factions.safezone.gui")) {
+							player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use a gui in a safe zone!");
+							event.setCancelled(true);
+						}
 					}
 				}
-				if(item == 23 || item == 58 || item == 61 || item == 54 || item == 84 || item == 116 || item == 342 || item == 343) {
-					if(!player.hasPermission("gamemode.bypass.factions.safezone.gui")) {
-						player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use a gui in a safe zone!");
-						event.setCancelled(true);
+				if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+					int block = player.getInventory().getItemInMainHand().getType().getId();
+					if(block == 384 || block == 373) {
+						if(!player.hasPermission("gamemode.bypass.factions.safezone.potions")) {
+							player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Potions in a safe zone!");
+							event.setCancelled(true);
+						}
 					}
-				}
-			}
-			if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-				int block = player.getItemInHand().getType().getId();
-				if(block == 384 || block == 373) {
-					if(!player.hasPermission("gamemode.bypass.factions.safezone.potions")) {
-						player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Potions in a safe zone!");
-						event.setCancelled(true);
+					if(block == 368) {
+						if(!player.hasPermission("gamemode.bypass.factions.safezone.enderpearl")) {
+							event.setCancelled(true);
+							player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Ender Pearls in a safe zone!");
+						}
 					}
-				}
-				if(block == 368) {
-					if(!player.hasPermission("gamemode.bypass.factions.safezone.enderpearl")) {
-						event.setCancelled(true);
-						player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Ender Pearls in a safe zone!");
+					if(block == 332) {
+						if(!player.hasPermission("gamemode.bypass.factions.safezone.snowball")) {
+							event.setCancelled(true);
+							player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Snow Balls in a safe zone!");
+						}
 					}
-				}
-				if(block == 332) {
-					if(!player.hasPermission("gamemode.bypass.factions.safezone.snowball")) {
-						event.setCancelled(true);
-						player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Snow Balls in a safe zone!");
-					}
-				}
-				if(block == 344) {
-					if(!player.hasPermission("gamemode.bypass.factions.safezone.egg")) {
-						event.setCancelled(true);
-						player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Chicken Eggs in a safe zone!");
+					if(block == 344) {
+						if(!player.hasPermission("gamemode.bypass.factions.safezone.egg")) {
+							event.setCancelled(true);
+							player.sendMessage(Gamemode.getError() + ChatColor.GOLD + "[Factions] " + ChatColor.RED + "You cannot use Chicken Eggs in a safe zone!");
 
+						}
 					}
 				}
 			}

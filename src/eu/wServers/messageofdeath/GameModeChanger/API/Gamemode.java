@@ -17,7 +17,6 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 
 import eu.wServers.messageofdeath.GameModeChanger.GameModeChanger;
 
-// Inspired by Wundark(wServers)
 public class Gamemode {
 
 	public static GameModeChanger plugin;
@@ -65,9 +64,8 @@ public class Gamemode {
 		return Gamemode.getConfig().getBoolean("Plugin.Use.Vault_Economy");
 	}
 
-	@SuppressWarnings("static-access")
 	public static Economy getVault() {
-		return plugin.economy;
+		return GameModeChanger.economy;
 	}
 
 	public static Eco getEconomy(String name, double amount) {
@@ -165,9 +163,8 @@ public class Gamemode {
 		return Gamemode.getConfig().getStringList("Worlds");
 	}
 
-	@SuppressWarnings("static-access")
 	public static FileConfiguration getDatabase() {
-		return Gamemode.getPlugin().db;
+		return GameModeChanger.db;
 	}
 
 	public static void saveDatabase() {
@@ -178,18 +175,16 @@ public class Gamemode {
 		}
 	}
 
-	@SuppressWarnings("static-access")
 	public static String getPluginName() {
-		return plugin.name;
+		return GameModeChanger.name;
 	}
 
 	public static boolean getOnListAll() {
 		return Gamemode.getConfig().getBoolean("Plugin.onListAllGamemodesDisplayOfflinePlayers");
 	}
 
-	@SuppressWarnings("static-access")
 	public static String getPluginVersion() {
-		return plugin.version;
+		return GameModeChanger.version;
 	}
 
 	public static boolean getAnnounceToPlayers() {
@@ -220,9 +215,8 @@ public class Gamemode {
 		return Chat.HELP.getChat();
 	}
 
-	@SuppressWarnings("static-access")
 	public static FileConfiguration getConfig() {
-		return plugin.config;
+		return GameModeChanger.config;
 	}
 
 	public static String getDefaultGamemode() {

@@ -10,12 +10,13 @@ import eu.wServers.messageofdeath.GameModeChanger.API.Gamemode;
 
 public class playerInteractEvent implements Listener {
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onEvents(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		Action action = event.getAction();
 		if(action == Action.RIGHT_CLICK_BLOCK) {
-			int block = player.getItemInHand().getType().getId();
+			int block = player.getInventory().getItemInMainHand().getType().getId();
 			int item = event.getClickedBlock().getType().getId();
 			if(player.getGameMode() == Gamemode.getCreative()) {
 				if(block == 383) {
@@ -47,7 +48,7 @@ public class playerInteractEvent implements Listener {
 			}
 		}
 		if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
-			int block = player.getItemInHand().getType().getId();
+			int block = player.getInventory().getItemInMainHand().getType().getId();
 			if(block == 384 || block == 373) {
 				// block potions
 				if(player.getGameMode() == Gamemode.getCreative()) {
