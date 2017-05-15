@@ -24,7 +24,7 @@ public class gsCommand implements CommandExecutor {
 			}
 			if(args.length == 1) {
 				Player targetplayer = player.getServer().getPlayer(args[0]);
-				Gamemode.setOtherPlayerGamemode(player, targetplayer, Gamemode.getSurvival(), false);
+				Gamemode.setOtherPlayerGamemode(player, targetplayer, Gamemode.getSurvival());
 			}
 		}
 		return false;

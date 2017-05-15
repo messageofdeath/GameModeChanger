@@ -24,7 +24,7 @@ public class gcCommand implements CommandExecutor {
 			}
 			if(args.length == 1) {
 				Player targetplayer = player.getServer().getPlayer(args[0]);
-				Gamemode.setOtherPlayerGamemode(player, targetplayer, Gamemode.getCreative(), false);
+				Gamemode.setOtherPlayerGamemode(player, targetplayer, Gamemode.getCreative());
 			}
 		}
 		return false;

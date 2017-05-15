@@ -72,11 +72,9 @@ public class gmCommand implements CommandExecutor {
 					}
 					Player player = (Player) p;
 					if(player.hasPermission("gamemode.toggle.change.self")) {
-						if(player.getGameMode() == Gamemode.getCreative()) {
-							Gamemode.setPlayerGamemode(player, Gamemode.getSurvival(), "toggle");
-							player.sendMessage(Gamemode.getSuccess() + "You have been changed to " + ChatColor.GOLD + player.getGameMode().name().toLowerCase() + "!");
-							return false;
-						}
+						Gamemode.setPlayerGamemode(player, null, "toggle");
+						player.sendMessage(Gamemode.getSuccess() + "You have been changed to " + ChatColor.GOLD + player.getGameMode().name().toLowerCase() + "!");
+						return false;
 					}else {
 						p.sendMessage(Gamemode.getNoPermission());
 					}
@@ -132,26 +130,17 @@ public class gmCommand implements CommandExecutor {
 				}
 				if(cd.equalsIgnoreCase("adv") || cd.equalsIgnoreCase("adventure") || cd.equalsIgnoreCase("2")) {
 					Player tplayer = Bukkit.getServer().getPlayer(cd1);
-					if(p instanceof Player)
-						Gamemode.setOtherPlayerGamemode((Player) p, tplayer, Gamemode.getAdventure(), false);
-					else
-						Gamemode.setOtherPlayerGamemode(p, tplayer, Gamemode.getAdventure(), false);
+					Gamemode.setOtherPlayerGamemode(p, tplayer, Gamemode.getAdventure());
 					return false;
 				}
 				if(cd.equalsIgnoreCase("cre") || cd.equalsIgnoreCase("creative") || cd.equalsIgnoreCase("1")) {
 					Player tplayer = Bukkit.getServer().getPlayer(cd1);
-					if(p instanceof Player)
-						Gamemode.setOtherPlayerGamemode((Player) p, tplayer, Gamemode.getCreative(), false);
-					else
-						Gamemode.setOtherPlayerGamemode(p, tplayer, Gamemode.getAdventure(), false);
+					Gamemode.setOtherPlayerGamemode(p, tplayer, Gamemode.getCreative());
 					return false;
 				}
 				if(cd.equalsIgnoreCase("sur") || cd.equalsIgnoreCase("survival") || cd.equalsIgnoreCase("0")) {
 					Player tplayer = Bukkit.getServer().getPlayer(cd1);
-					if(p instanceof Player)
-						Gamemode.setOtherPlayerGamemode((Player) p, tplayer, Gamemode.getSurvival(), false);
-					else
-						Gamemode.setOtherPlayerGamemode(p, tplayer, Gamemode.getAdventure(), false);
+					Gamemode.setOtherPlayerGamemode(p, tplayer, Gamemode.getSurvival());
 					return false;
 				}
 			}

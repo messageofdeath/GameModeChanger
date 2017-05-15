@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -301,25 +300,13 @@ public class Gamemode {
 
 	public static void setPlayerGamemode(Player player, GameMode gamemode, boolean support) {
 		if(player.hasPermission("gamemode.change") && player.hasPermission("gamemode." + gamemode.name().toLowerCase() + ".change.self")) {
-			if(gamemode == Gamemode.getCreative()) {
-				if(player.getGameMode() == Gamemode.getSurvival()) {
-					player.setGameMode(Gamemode.getCreative());
-					if(support == false) {
-						player.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + "!");
-					}
-				}else {
-					player.sendMessage(Gamemode.getCreativeError());
+			if(player.getGameMode() != gamemode) {
+				player.setGameMode(gamemode);
+				if(support == false) {
+					player.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + gamemode.name() + " Mode " + ChatColor.GREEN + "!");
 				}
-			}
-			if(gamemode == Gamemode.getSurvival()) {
-				if(player.getGameMode() == Gamemode.getCreative()) {
-					player.setGameMode(Gamemode.getSurvival());
-					if(support == false) {
-						player.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + "!");
-					}
-				}else {
-					player.sendMessage(Gamemode.getSurvivalError());
-				}
+			}else{
+				player.sendMessage(Gamemode.getError() + "You are already in "+gamemode.name()+" Mode!");
 			}
 		}else {
 			player.sendMessage(Gamemode.getNoPermission());
@@ -328,134 +315,38 @@ public class Gamemode {
 
 	public static void setSignPlayerGamemode(Player player, GameMode gm, Eco eco) {
 		if(player.hasPermission("gamemode.change")) {
-			if(gm == Gamemode.getCreative()) {
-				if(!(player.getGameMode() == Gamemode.getCreative())) {
-					eco.charge();
-					player.setGameMode(gm);
-					player.sendMessage(Gamemode.getSuccess() + "You spent " + eco.getFormat() + " on creative mode from a sign!");
-				}else {
-					player.sendMessage(Gamemode.getCreativeError());
-				}
-			}
-			if(gm == Gamemode.getSurvival()) {
-				if(player.getGameMode() != gm) {
+			if(player.getGameMode() != gm) {
+				if(eco.hasEnough()) {
 					eco.charge();
 					player.setGameMode(gm);
 					player.sendMessage(Gamemode.getSuccess() + "You spent " + eco.getFormat() + " on survival mode from a sign!");
-				}else {
-					player.sendMessage(Gamemode.getSurvivalError());
+				}else{
+					player.sendMessage(Gamemode.getError() + "You do not have enough money!");
 				}
+			}else{
+				player.sendMessage(Gamemode.getError() + "You are already in "+gm.name()+" Mode!");
 			}
 		}
 	}
 
-	public static void setOtherPlayerGamemode(CommandSender player, Player targetplayer, GameMode gamemode, boolean console) {
-		if(console == false) {
-			if(player.hasPermission("gamemode.change") && player.hasPermission("gamemode." + gamemode.name().toLowerCase() + ".change.player")) {
-				if(targetplayer != null) {
-					if(gamemode == Gamemode.getCreative()) {
-						if(targetplayer.getGameMode() == Gamemode.getSurvival()) {
-							targetplayer.setGameMode(Gamemode.getCreative());
-							player.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + "!");
-							targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + player.getName());
-						}else {
-							player.sendMessage(Gamemode.getCreativeOtherError(targetplayer.getName()));
-						}
-					}
-					if(gamemode == Gamemode.getSurvival()) {
-						if(targetplayer.getGameMode() == Gamemode.getCreative()) {
-							targetplayer.setGameMode(Gamemode.getSurvival());
-							player.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + "!");
-							targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + player.getName());
-						}else {
-							player.sendMessage(Gamemode.getSurvivalOtherError(targetplayer.getName()));
-						}
-					}
-				}else {
-					player.sendMessage(Gamemode.getPlayerDoesNotExist());
+	public static void setOtherPlayerGamemode(CommandSender sender, Player targetplayer, GameMode gamemode) {
+		if(sender.hasPermission("gamemode.change") && sender.hasPermission("gamemode." + gamemode.name().toLowerCase() + ".change.player")) {
+			if(targetplayer != null) {
+				if(targetplayer.getGameMode() != gamemode) {
+					targetplayer.setGameMode(gamemode);
+					sender.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD 
+							+ gamemode.name() + " Mode" + ChatColor.GREEN + "!");
+					targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + gamemode.name() + " Mode" + ChatColor.GREEN + " by " 
+							+ ChatColor.BLUE + sender.getName());
+				}else{
+					sender.sendMessage(Gamemode.getError() + ChatColor.BLUE + targetplayer.getName() + ChatColor.RED + " is already in " 
+							+ ChatColor.GOLD + gamemode.name() + " Mode" + ChatColor.RED + "!");
 				}
 			}else {
-				player.sendMessage(Gamemode.getNoOtherPermission());
+				sender.sendMessage(Gamemode.getPlayerDoesNotExist());
 			}
 		}else {
-			ConsoleCommandSender p = Bukkit.getServer().getConsoleSender();
-			if(targetplayer != null) {
-				if(gamemode == Gamemode.getCreative()) {
-					if(targetplayer.getGameMode() == Gamemode.getSurvival()) {
-						targetplayer.setGameMode(Gamemode.getCreative());
-						p.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + "!");
-						targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + p.getName());
-					}else {
-						p.sendMessage(Gamemode.getCreativeOtherError(targetplayer.getName()));
-					}
-				}
-				if(gamemode == Gamemode.getSurvival()) {
-					if(targetplayer.getGameMode() == Gamemode.getCreative()) {
-						targetplayer.setGameMode(Gamemode.getSurvival());
-						p.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + "!");
-						targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + p.getName());
-					}else {
-						player.sendMessage(Gamemode.getSurvivalOtherError(targetplayer.getName()));
-					}
-				}
-			}else {
-				p.sendMessage(Gamemode.getPlayerDoesNotExist());
-			}
-		}
-	}
-
-	public static void setOtherPlayerGamemode(Player player, Player targetplayer, GameMode gamemode, boolean console) {
-		if(console == false) {
-			if(player.hasPermission("gamemode.change") && player.hasPermission("gamemode." + gamemode.name().toLowerCase() + ".change.player")) {
-				if(targetplayer != null) {
-					if(gamemode == Gamemode.getCreative()) {
-						if(targetplayer.getGameMode() == Gamemode.getSurvival()) {
-							targetplayer.setGameMode(Gamemode.getCreative());
-							player.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + "!");
-							targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + player.getName());
-						}else {
-							player.sendMessage(Gamemode.getCreativeOtherError(targetplayer.getName()));
-						}
-					}
-					if(gamemode == Gamemode.getSurvival()) {
-						if(targetplayer.getGameMode() == Gamemode.getCreative()) {
-							targetplayer.setGameMode(Gamemode.getSurvival());
-							player.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + "!");
-							targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + player.getName());
-						}else {
-							player.sendMessage(Gamemode.getSurvivalOtherError(targetplayer.getName()));
-						}
-					}
-				}else {
-					player.sendMessage(Gamemode.getPlayerDoesNotExist());
-				}
-			}else {
-				player.sendMessage(Gamemode.getNoOtherPermission());
-			}
-		}else {
-			ConsoleCommandSender p = Bukkit.getServer().getConsoleSender();
-			if(targetplayer != null) {
-				if(gamemode == Gamemode.getCreative()) {
-					if(targetplayer.getGameMode() == Gamemode.getSurvival()) {
-						targetplayer.setGameMode(Gamemode.getCreative());
-						p.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + "!");
-						targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Creative Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + p.getName());
-					}else {
-						p.sendMessage(Gamemode.getCreativeOtherError(targetplayer.getName()));
-					}
-				}
-				if(gamemode == Gamemode.getSurvival()) {
-					if(targetplayer.getGameMode() == Gamemode.getCreative()) {
-						targetplayer.setGameMode(Gamemode.getSurvival());
-						p.sendMessage(Gamemode.getSuccess() + ChatColor.BLUE + targetplayer.getName() + ChatColor.GREEN + " is now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + "!");
-						targetplayer.sendMessage(Gamemode.getSuccess() + "You are now in " + ChatColor.GOLD + "Survival Mode" + ChatColor.GREEN + " by " + ChatColor.BLUE + p.getName());
-					}else {
-						player.sendMessage(Gamemode.getSurvivalOtherError(targetplayer.getName()));
-					}
-				}
-			}else {
-				p.sendMessage(Gamemode.getPlayerDoesNotExist());
-			}
+			sender.sendMessage(Gamemode.getNoOtherPermission());
 		}
 	}
 
