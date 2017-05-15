@@ -1,6 +1,6 @@
 name: GameModeChanger
 author: messageofdeath
-version: 2.6
+version: 3.0
 softdepend: [Vault]
 main: eu.wServers.messageofdeath.GameModeChanger.GameModeChanger
 commands:
